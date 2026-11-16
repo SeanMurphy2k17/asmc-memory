@@ -1,0 +1,52 @@
+{
+  "name": "asmc-memory",
+  "version": "0.1.0",
+  "description": "Persistent semantic memory for Claude Code: involuntary recall injected into every prompt, every exchange remembered across sessions, plus recall / journal_write / set_mood tools. Local only, powered by ASMC.",
+  "author": { "name": "Sean Murphy" },
+  "license": "MIT",
+  "keywords": ["memory", "asmc", "semantic-memory", "journal", "local"],
+  "userConfig": {
+    "storeDir": {
+      "type": "string",
+      "title": "Memory store directory",
+      "description": "Where the memory lives (STM, LTM, mood, journal, the Python venv). Empty means ~/.claude/asmc-memory.",
+      "required": false,
+      "default": ""
+    },
+    "charBudget": {
+      "type": "number",
+      "title": "Injected memory budget (characters) — no longer used",
+      "description": "Since 2026-11-14 nothing in the block is shortened or dropped: every entry is shown whole, and the sizes are the counts below. Kept so older configs still load.",
+      "required": false,
+      "default": 6000
+    },
+    "recentCount": {
+      "type": "number",
+      "title": "Recent exchanges to carry forward",
+      "description": "How many of the newest exchanges from earlier sessions are attached for continuity.",
+      "required": false,
+      "default": 6
+    },
+    "semanticCount": {
+      "type": "number",
+      "title": "Semantic matches to attach",
+      "description": "How many topically relevant past exchanges ASMC may attach per prompt.",
+      "required": false,
+      "default": 6
+    },
+    "autoStore": {
+      "type": "boolean",
+      "title": "Remember every exchange",
+      "description": "Store each prompt and final answer automatically (the involuntary half). Off keeps only journal entries and moods.",
+      "required": false,
+      "default": true
+    },
+    "injectMood": {
+      "type": "boolean",
+      "title": "Carry mood forward",
+      "description": "Attach the last self-declared mood as a default, not a verdict.",
+      "required": false,
+      "default": true
+    }
+  }
+}

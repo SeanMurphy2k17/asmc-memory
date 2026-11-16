@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.claude-plugin/types/
+venv/
+.venv/
+node_modules/
+python/asmc/.before-whole-*/
+*.orig-*

@@ -1,0 +1,5 @@
+nltk>=3.9
+numpy>=1.26
+lmdb>=1.4
+faiss-cpu>=1.8
+pyspellchecker>=0.8
