@@ -1,0 +1,11 @@
+{
+  "name": "asmc-local",
+  "owner": { "name": "Sean Murphy" },
+  "plugins": [
+    {
+      "name": "asmc-memory",
+      "source": "./",
+      "description": "Persistent local semantic memory for Claude Code, powered by ASMC."
+    }
+  ]
+}
