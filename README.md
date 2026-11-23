@@ -41,10 +41,17 @@ A short section is added to the system prompt so Claude knows the block is recal
 
 ## Install
 
-From a terminal session of Claude Code, once the plugin is published to a marketplace:
+From a Claude Code session (2.1.275 or later):
 
 ```
-/plugin install asmc-memory --marketplace <owner>/<repo>
+/plugin install asmc-memory --marketplace SeanMurphy2k17/asmc-memory
+```
+
+On older versions, add the marketplace first, then install from it:
+
+```
+/plugin marketplace add SeanMurphy2k17/asmc-memory
+/plugin install asmc-memory@asmc-local
 ```
 
 Or run it straight from a folder while developing:
