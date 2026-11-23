@@ -8,7 +8,7 @@ It is the Claude Code port of a setup that first ran a local open-weight model a
 
 **Involuntary** (hooks, no model action):
 
-- After each prompt you type, a context block headed *Memory (ASMC)* is attached, invisible to you, visible to Claude. It carries the newest exchanges from earlier sessions, a few past exchanges found by search (exact words and semantic proximity, interleaved), Claude's own journal entries, the mood Claude last declared, and one entry offered by association rather than relevance: a memory the library has linked to one of the hits, which may have nothing to do with the prompt. That last one is deliberate. Unrelated memories are texture; a memory that only ever returns what you asked for is a database. The block is budgeted (default 6,000 characters) and trimmed newest-first for continuity, most-relevant-first for recall.
+- After each prompt you type, a context block headed *Memory (ASMC)* is attached, invisible to you, visible to Claude. It carries the newest exchanges from earlier sessions, a few past exchanges found by search (exact words and semantic proximity, interleaved), Claude's own journal entries, the mood Claude last declared, and one entry offered by association rather than relevance: a memory the library has linked to one of the hits, which may have nothing to do with the prompt. That last one is deliberate. Unrelated memories are texture; a memory that only ever returns what you asked for is a database. Every entry in the block is shown whole: nothing is shortened or dropped to fit a budget. Its size is set by how many entries are asked for (see Options), so it grows with the length of what you and Claude have said.
 - When a turn ends with an answer, the prompt and the final answer are stored as one experience.
 - Entries from the current session are not re-injected while they are still in the context window. After a compaction, the part of the session that fell out becomes recallable again.
 
@@ -32,6 +32,15 @@ A short section is added to the system prompt so Claude knows the block is recal
 **Credentials.** Before anything is stored, live or imported, credential-shaped strings (API keys, GitHub and Slack tokens, AWS keys, bearer headers, `password=` style assignments, private key blocks) are replaced with a labelled placeholder. The words around them stay.
 
 **Importing what happened before the plugin was installed**: `/asmc backfill` reads the current session's transcript; `python/backfill.py --all-projects --dry-run` lists every Claude Code transcript on the machine with what would be stored, skipped or excluded, and without `--dry-run` imports them all in one timeline, oldest first across projects. History older than the short-term window goes straight to long-term memory, so the window keeps holding what actually happened most recently. It (`~/.claude/projects/<project>/<session>.jsonl`), pairs each prompt you typed with the final answer of its turn, strips the harness noise, and stores the exchanges oldest first with the time they actually happened. Give it a path to import another session. A ledger in the store remembers how far each session has been imported, and an exchange the hooks already stored is recognised, so running it again adds nothing. It takes about a minute per hundred turns.
+
+## Before you install
+
+- **It costs tokens on every prompt.** The memory block rides along with each message you type. On a long-lived store it is large: on the store this plugin was developed with (three weeks, a few thousand exchanges), the median block was about 100,000 characters (roughly 25K tokens), and one prompt in ten carried over 190,000. A new store starts small and grows. If you pay per token, or work near your context limit, turn the counts down (Options below).
+- **It keeps everything.** Every prompt and final answer is stored, whole, on your machine. Credential-shaped strings are replaced first, but anything else you say is kept. Put a project you never want remembered in `excluded-projects.txt` before you work in it.
+- **Memory is not truth.** Recall returns what was said, not what is true now: a file that moved, a setting that changed, a decision that was reversed. The block tells Claude it is recall, not instruction, but check anything load-bearing against the files.
+- **It is early.** Linux and macOS, one store per machine, tested by a small number of people.
+
+It suits one person working with Claude over weeks on the same projects. For quick one-off tasks it is mostly cost.
 
 ## Requirements
 
@@ -96,17 +105,21 @@ The memory library is [ASMC](python/asmc/VENDORED.md) (Advanced Semantic Memory 
 | Option | Default | Meaning |
 | --- | --- | --- |
 | Memory store directory | `~/.claude/asmc-memory` | Where everything lives |
-| Injected memory budget | 6000 | Max characters attached per prompt |
+| Injected memory budget | 6000 | No longer used: nothing in the block is shortened (kept so older settings still load) |
 | Recent exchanges to carry forward | 6 | Continuity from earlier sessions |
 | Semantic matches to attach | 6 | Topical recall per prompt |
 | Remember every exchange | on | The involuntary store step |
 | Carry mood forward | on | Attach the last declared mood |
 
+To make the block smaller, lower *Recent exchanges* and *Semantic matches*, and `ASMC_ASSOCIATIVE` and `ASMC_PROJECT_RECENT` below; each entry you remove is one whole past exchange fewer per prompt.
+
 Environment settings, read by the daemon when it starts (set them where Claude Code runs, or in a wrapper that starts it):
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
-| `ASMC_ASSOCIATIVE` | 1 | Entries offered by association per block; 0 turns the wandering off |
+| `ASMC_ASSOCIATIVE` | 3 | Entries offered by association per block; 0 turns the wandering off |
+| `ASMC_PROJECT_RECENT` | 3 | Newest exchanges of the current project carried in every block |
+| `ASMC_OVERLAP_HITS` | 3 | Extra exact-word matches merged into the search results |
 | `ASMC_STITCH_NEIGHBOURS` | 5 | How many nearest memories each new memory is linked to; higher gives the traversal more to wander along |
 | `ASMC_FAISS_THREADS` | 1 | Threads FAISS may use; one is right for a flat index of a few hundred small vectors |
 | `ASMC_IDLE_EXIT` | 14400 | Seconds of silence before the daemon exits (the hooks restart it on demand) |
