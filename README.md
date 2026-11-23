@@ -37,7 +37,7 @@ A short section is added to the system prompt so Claude knows the block is recal
 
 - Linux or macOS (the memory daemon listens on a Unix socket).
 - `python3` 3.10 or newer on your PATH, with the `venv` module (on Debian/Ubuntu: `apt install python3-venv`).
-- Network access once, for the first-run install (about 60 MB of wheels plus NLTK data).
+- Network access once, for the first-run install (about 60 MB of downloads; the private environment takes about 180 MB on disk).
 
 ## Install
 

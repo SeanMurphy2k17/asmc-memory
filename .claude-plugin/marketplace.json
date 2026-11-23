@@ -1,6 +1,8 @@
 {
   "name": "asmc-local",
-  "owner": { "name": "Sean Murphy" },
+  "owner": {
+    "name": "Sean Murphy"
+  },
   "plugins": [
     {
       "name": "asmc-memory",

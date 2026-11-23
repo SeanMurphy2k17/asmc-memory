@@ -1,10 +1,18 @@
 {
   "name": "asmc-memory",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Persistent semantic memory for Claude Code: involuntary recall injected into every prompt, every exchange remembered across sessions, plus recall / journal_write / set_mood tools. Local only, powered by ASMC.",
-  "author": { "name": "Sean Murphy" },
+  "author": {
+    "name": "Sean Murphy"
+  },
   "license": "MIT",
-  "keywords": ["memory", "asmc", "semantic-memory", "journal", "local"],
+  "keywords": [
+    "memory",
+    "asmc",
+    "semantic-memory",
+    "journal",
+    "local"
+  ],
   "userConfig": {
     "storeDir": {
       "type": "string",
@@ -15,7 +23,7 @@
     },
     "charBudget": {
       "type": "number",
-      "title": "Injected memory budget (characters) — no longer used",
+      "title": "Injected memory budget (characters) \u2014 no longer used",
       "description": "Since 2026-11-14 nothing in the block is shortened or dropped: every entry is shown whole, and the sizes are the counts below. Kept so older configs still load.",
       "required": false,
       "default": 6000
@@ -48,5 +56,6 @@
       "required": false,
       "default": true
     }
-  }
+  },
+  "icon": "./.claude-plugin/icon.png"
 }
